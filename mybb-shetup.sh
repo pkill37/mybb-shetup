@@ -20,6 +20,7 @@ else
 		cd $DOWNLOADPATH
 	else
 		echo "Aborting..."
+		exit 1
 	fi
 fi
 
