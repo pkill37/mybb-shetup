@@ -84,10 +84,12 @@ function create_database() {
 	# grant mybb db user permissions
 	mysql -uroot -p`$ROOTPASS` -e "GRANT ALL ON `$DBNAME`.* TO '`$DBUSER`'@'localhost';"
 }
+function rename_config(){
+	mv inc/config.default.php inc/config.php
+}
 function chmod_files(){
 	chmod -R 777 cache/
 	chmod -R 777 uploads/
-	mv inc/config.default.php inc/config.php
 	chmod 666 inc/config.php
 	chmod 666 inc/settings.php
 }
