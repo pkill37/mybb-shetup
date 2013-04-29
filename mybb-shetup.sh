@@ -93,25 +93,26 @@ function chmod_files(){
 	chmod 666 inc/config.php
 	chmod 666 inc/settings.php
 }
+function display_ascii_art(){
+	echo "
+	  __  __       ____  ____  
+	 |  \/  |     |  _ \|  _ \ 
+	 | \  / |_   _| |_) | |_) |
+	 | |\/| | | | |  _ <|  _ < 
+	 | |  | | |_| | |_) | |_) |
+	 |_|  |_|\__, |____/|____/ 
+	          __/ |            
+	         |___/             
+	"
+	echo "Because free never tasted so good!
+
+	"
+}
 ###############################
 #START INSTALLER
 ###############################
 
-
-# Display MyBB ASCII art text
-echo "
-  __  __       ____  ____  
- |  \/  |     |  _ \|  _ \ 
- | \  / |_   _| |_) | |_) |
- | |\/| | | | |  _ <|  _ < 
- | |  | | |_| | |_) | |_) |
- |_|  |_|\__, |____/|____/ 
-          __/ |            
-         |___/             
-"
-echo "Because free never tasted so good!
-
-"
+display_ascii_art
 pause "Press [ENTER] to continue... or press CTRL+C to quit."
 
 # Say "Initializing" and sleep for 2 seconds. Just because it seems cool.
