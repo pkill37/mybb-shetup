@@ -1,6 +1,9 @@
 # mybb-shetup
 
-Don't use this yet. Bash script that downloads MyBB and prepares it to be installed.
+DO NOT USE THIS YET. This branch is being actively developed and is not complete yet.
+
+
+Bash script that downloads MyBB and prepares it to be installed.
 
 ## Requirements
 
