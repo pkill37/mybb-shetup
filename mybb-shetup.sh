@@ -155,11 +155,11 @@ function start_php_server(){
 	read -p "What hostname would you like to use for the PHP 5.4 server? [localhost]" HOSTNAME
 	read -p "What port would you like to host the PHP 5.4 server on? [8000]" PORT
 
-	php -S `$HOST`:`$PORT`
+	php -S `$HOSTNAME`:`$PORT`
 }
 
 function openbrowser_installdir(){
-	URL="http://$HOST:$PORT/install"
+	URL="http://$HOSTNAME:$PORT/install"
 
 	if command_exists xdg-open ; then # Linux
 		xdg-open `$URL`
