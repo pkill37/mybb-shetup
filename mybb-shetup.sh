@@ -6,8 +6,23 @@
 function pause(){
    read -p "$*"
 }
+
+function confirm_install() {
+    # call with a prompt string or use a default
+    read -r -p "Do you want to install MyBB $BRANCH to $INSTALL_DIR? []" response
+    case $response in
+        [yY][eE][sS]|[yY]) 
+            download
+            ;;
+        *)
+            echo "Aborting by user choice."
+            exit 1
+            ;;
+    esac
+}
+
 function dir_select(){
-	read -p "Where would you like to install MyBB to? []: " INSTALL_DIR
+	read -p "Where would you like to install MyBB to (FULL PATH)? []: " INSTALL_DIR
 	if [[ -d "$INSTALL_DIR" ]] ; then
 		cd $INSTALL_DIR
 	else
@@ -17,10 +32,11 @@ function dir_select(){
 		CREATEPERMLOWER=$( echo "$CREATEPERM" | tr -s  '[:upper:]'  '[:lower:]' )
 
 		if [[ $CREATEPERMLOWER == y || $CREATEPERMLOWER == yes ]]; then
-			echo "Creating $DOWNLOADPATH..."
+			echo "Creating $INSTALL_DIR..."
 			sleep 1
-			mkdir $DOWNLOADPATH
-			cd $DOWNLOADPATH
+			mkdir -p $INSTALL_DIR
+			cd $INSTALL_DIR
+			INSTALL_ROOT=`pwd`
 		else
 			echo "Declined option to create path. Canceling installation."
 			exit 1
@@ -37,16 +53,16 @@ function command_exists(){
 }
 function pick_command(){
 	if command_exists git ; then
-		DLCOMMAND="git clone https://github.com/mybb/mybb.git -b `$BRANCH`"
+		DLCOMMAND="git clone https://github.com/mybb/mybb.git -b $BRANCH"
 		COMMAND_USED="git"
 	elif command_exists wget ; then
-		DLCOMMAND="wget --content-disposition https://github.com/mybb/mybb/archive/`$BRANCH`.zip"
+		DLCOMMAND="wget --content-disposition https://github.com/mybb/mybb/archive/$BRANCH.zip"
 		COMMAND_USED="wget"
 	elif command_exists curl ; then
-		DLCOMMAND="curl https://github.com/mybb/mybb/archive/`$BRANCH`.zip -o mybb.zip"
+		DLCOMMAND="curl https://github.com/mybb/mybb/archive/$BRANCH.zip -o mybb.zip"
 		COMMAND_USED="curl"
 	elif command_exists lynx ; then
-		DLCOMMAND="lynx -crawl -dump https://github.com/mybb/mybb/archive/`$BRANCH`.zip > mybb.zip"
+		DLCOMMAND="lynx -crawl -dump https://github.com/mybb/mybb/archive/$BRANCH.zip > mybb.zip"
 		COMMAND_USED="lynx"
 	else
 		echo "git, wget, curl, or lynx are required to install MyBB. Please install one and try again."
@@ -84,6 +100,11 @@ function create_database() {
 	# grant mybb db user permissions
 	mysql -uroot -p`$ROOTPASS` -e "GRANT ALL ON `$DBNAME`.* TO '`$DBUSER`'@'localhost';"
 }
+
+function unfold_files()
+{
+	mv mybb/* .
+}
 function rename_config(){
 	mv inc/config.default.php inc/config.php
 }
@@ -118,13 +139,13 @@ pause "Press [ENTER] to continue... or press CTRL+C to quit."
 # Say "Initializing" and sleep for 2 seconds. Just because it seems cool.
 clear
 echo ":: INITIALIZING"
-sleep 2
+sleep 1
 echo "Welcome to the MyBB shell installer. This script will help you set up a copy of MyBB in under a minute!."
 clear
 
 dir_select
 select_branch
-read -p "Are you sure you want to install MyBB `$BRANCH` to `$INSTALL_DIR`? [Y/n]: " INSTALL_YESNO
-
-if [ "$INSTALL_YESNO" = ]
-download
+confirm_install
+unfold_files
+rename_config
+chmod_files
