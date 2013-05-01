@@ -129,20 +129,23 @@ function display_ascii_art(){
 
 	"
 }
+
+function welcome_message(){
+	display_ascii_art
+	pause "Press [ENTER] to continue... or press CTRL+C to quit."
+
+	# Say "Initializing" and sleep for 2 seconds. Just because it seems cool.
+	clear
+	echo ":: INITIALIZING"
+	sleep 1
+	echo "Welcome to the MyBB shell installer. This script will help you set up a copy of MyBB in under a minute!."
+	clear
+}
 ###############################
 #START INSTALLER
 ###############################
 
-display_ascii_art
-pause "Press [ENTER] to continue... or press CTRL+C to quit."
-
-# Say "Initializing" and sleep for 2 seconds. Just because it seems cool.
-clear
-echo ":: INITIALIZING"
-sleep 1
-echo "Welcome to the MyBB shell installer. This script will help you set up a copy of MyBB in under a minute!."
-clear
-
+welcome_message
 dir_select
 select_branch
 confirm_install
