@@ -151,6 +151,22 @@ function create_database(){
 	mysql -uroot -p`$ROOTPASS` -e "GRANT ALL ON `$DBNAME`.* TO '`$DBUSER`'@'localhost';"
 }
 
+function start_php_server(){
+	read -p "What hostname would you like to use for the PHP 5.4 server? [localhost]" HOSTNAME
+	read -p "What port would you like to host the PHP 5.4 server on? [8000]" PORT
+
+	php -S `$HOST`:`$PORT`
+}
+
+function openbrowser_installdir(){
+	URL="http://$HOST:$PORT/install"
+
+	if command_exists xdg-open ; then # Linux
+		xdg-open `$URL`
+	else # OSX
+		open `$URL`
+}
+
 #############################################################################
 ## Bootstrap installer
 #############################################################################
