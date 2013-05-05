@@ -10,7 +10,7 @@ Bash script that downloads MyBB and prepares it to be installed.
 - Linux/Mac OS
 - git
 - wget, curl or lynx
-- PHP >= 5.4
+- PHP >= 5.4 (for open browser feature)
 
 ## Features
 
