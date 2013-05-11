@@ -165,6 +165,7 @@ function openbrowser_installdir(){
 		xdg-open `$URL`
 	else # OSX
 		open `$URL`
+	fi
 }
 
 #############################################################################
