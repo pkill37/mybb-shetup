@@ -4,15 +4,15 @@
 ## Generic helper functions
 #############################################################################
 
-function pause(){
+pause() {
    read -p "$*"
 }
 
-function command_exists(){
+command_exists() {
 	type "$1" &> /dev/null ;
 }
 
-function php_version(){
+php_version() {
    php -v | head -n 1 | cut -d ' ' -f2 | cut -d '-' -f1;
 }
 
@@ -20,7 +20,7 @@ function php_version(){
 ## Script functions
 #############################################################################
 
-function display_ascii_art(){
+display_ascii_art() {
 	echo "
 	  __  __       ____  ____  
 	 |  \/  |     |  _ \|  _ \ 
@@ -36,7 +36,7 @@ function display_ascii_art(){
 	"
 }
 
-function welcome_message(){
+welcome_message() {
 	display_ascii_art
 	pause "Press [ENTER] to continue... or press CTRL+C to quit."
 
@@ -48,7 +48,7 @@ function welcome_message(){
 	clear
 }
 
-function dir_select(){
+dir_select() {
 	read -p "Where would you like to install MyBB to (FULL PATH)? []: " INSTALL_DIR
 	if [[ -d "$INSTALL_DIR" ]] ; then
 		cd $INSTALL_DIR
@@ -71,11 +71,11 @@ function dir_select(){
 	fi	
 }
 
-function select_branch(){
+select_branch() {
 	read -p "What branch would you like to download? [MASTER/feature/stable]: " BRANCH
 }
 
-function confirm_install(){
+confirm_install() {
     # call with a prompt string or use a default
     read -r -p "Do you want to install MyBB $BRANCH to $INSTALL_DIR? []" response
     case $response in
@@ -89,7 +89,7 @@ function confirm_install(){
     esac
 }
 
-function pick_command(){
+pick_command() {
 	if command_exists git ; then
 		DLCOMMAND="git clone https://github.com/mybb/mybb.git -b $BRANCH"
 		COMMAND_USED="git"
@@ -108,7 +108,7 @@ function pick_command(){
 	fi
 }
 
-function download(){
+download() {
 	pick_command
 	if [ $COMMAND_USED = "git" ] ; then
 		`$DLCOMMAND`
@@ -123,22 +123,22 @@ function download(){
 	fi		
 }
 
-function unfold_files(){
+unfold_files() {
 	mv mybb/* .
 }
 
-function rename_config(){
+rename_config() {
 	mv inc/config.default.php inc/config.php
 }
 
-function chmod_files(){
+chmod_files() {
 	chmod -R 777 cache/
 	chmod -R 777 uploads/
 	chmod 666 inc/config.php
 	chmod 666 inc/settings.php
 }
 
-function create_database(){
+create_database() {
 	# Get root pass
 	echo "To create a database for you, we need some high-level privileges temporarily."
 	sleep 3
@@ -155,14 +155,14 @@ function create_database(){
 	mysql -uroot -p`$ROOTPASS` -e "GRANT ALL ON `$DBNAME`.* TO '`$DBUSER`'@'localhost';"
 }
 
-function start_php_server(){
+start_php_server() {
 	read -p "What hostname would you like to use for the PHP 5.4 server? [localhost]" HOSTNAME
 	read -p "What port would you like to host the PHP 5.4 server on? [8000]" PORT
 
 	php -S `$HOSTNAME`:`$PORT`
 }
 
-function openbrowser_installdir(){
+openbrowser_installdir() {
 	URL="http://$HOSTNAME:$PORT/install"
 
 	if command_exists xdg-open ; then # Linux
