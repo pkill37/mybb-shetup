@@ -16,6 +16,11 @@ abort() {
     exit 1
 }
 
+info() {
+    echo "$1"
+    sleep 1
+}
+
 command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
