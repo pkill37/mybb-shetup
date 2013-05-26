@@ -102,7 +102,7 @@ dir_select() {
             sleep 1
             mkdir -p $INSTALL_DIR
             cd $INSTALL_DIR
-            INSTALL_ROOT=`pwd`
+            INSTALL_ROOT=$(pwd)
         else
             abort "Declined option to create path. Canceling installation."
         fi
@@ -141,9 +141,9 @@ pick_command() {
 download() {
     pick_command
     if [ $COMMAND_USED = "git" ] ; then
-        `$DLCOMMAND`
+        $DLCOMMAND
     else
-        `$DLCOMMAND`
+        $DLCOMMAND
         if command_exists unzip ; then
             unzip mybb.zip
         else
@@ -174,30 +174,30 @@ create_database() {
     read -p "We assume your MySQL server has a root user, what is its password? []: " ROOTPASS
     # create/select DB
     read -p "What should the name of the database be? It should not already exist. [mybb]: " DBNAME
-    mysql -uroot -p`$ROOTPASS` -e "CREATE DATABASE '`$DBNAME`';"
+    mysql -uroot -p $ROOTPASS -e "CREATE DATABASE '$DBNAME';"
     # create mybb db user
     read -p "What should the username be for the regular DB user that MyBB will use? [mybb]: " DBUSER
     sleep 1
     read -p "Great! What should its password be? []: " DBPASS
-    mysql -uroot -p`$ROOTPASS` -e "CREATE USER '`$DBUSER`'@'localhost' IDENTIFIED BY '`$DBPASS`';"
+    mysql -uroot -p $ROOTPASS -e "CREATE USER '$DBUSER'@'localhost' IDENTIFIED BY '$DBPASS';"
     # grant mybb db user permissions
-    mysql -uroot -p`$ROOTPASS` -e "GRANT ALL ON `$DBNAME`.* TO '`$DBUSER`'@'localhost';"
+    mysql -uroot -p $ROOTPASS -e "GRANT ALL ON $DBNAME.* TO '$DBUSER'@'localhost';"
 }
 
 start_php_server() {
     read -p "What hostname would you like to use for the PHP 5.4 server? [localhost]" HOSTNAME
     read -p "What port would you like to host the PHP 5.4 server on? [8000]" PORT
 
-    php -S `$HOSTNAME`:`$PORT`
+    php -S $HOSTNAME:$PORT
 }
 
 openbrowser_installdir() {
     URL="http://$HOSTNAME:$PORT/install"
 
     if command_exists xdg-open ; then # Linux
-        xdg-open `$URL`
+        xdg-open $URL
     else # OSX
-        open `$URL`
+        open $URL
     fi
 }
 
