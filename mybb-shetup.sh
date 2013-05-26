@@ -205,10 +205,14 @@ openbrowser_installdir() {
 ## Bootstrap installer
 #############################################################################
 
-welcome_message
-dir_select
-select_branch
-confirm_install
-unfold_files
-rename_config
-chmod_files
+main() {
+    welcome_message
+    dir_select
+    select_branch
+    confirm_install
+    unfold_files
+    rename_config
+    chmod_files
+}
+
+main "$@"
