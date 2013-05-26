@@ -87,15 +87,11 @@ welcome_message() {
 
 dir_select() {
     read -p "Where would you like to install MyBB to (FULL PATH)? []: " INSTALL_DIR
+
     if [[ -d "$INSTALL_DIR" ]] ; then
         cd $INSTALL_DIR
     else
-        read -p "The path you entered does not exist. Would you like to create it? [Y/n]" CREATEPERM
-
-        # Turn to lowercase
-        CREATEPERMLOWER=$( echo "$CREATEPERM" | tr -s  '[:upper:]'  '[:lower:]' )
-
-        if [[ $CREATEPERMLOWER == y || $CREATEPERMLOWER == yes ]]; then
+        if prompt_yn "The path you entered does not exist. Would you like to create it?" "Y"; then
             echo "Creating $INSTALL_DIR..."
             sleep 1
             mkdir -p $INSTALL_DIR
@@ -113,17 +109,11 @@ select_branch() {
 }
 
 confirm_install() {
-    # call with a prompt string or use a default
-    read -r -p "Do you want to install MyBB $BRANCH to $INSTALL_DIR? []" response
-    case $response in
-        [yY][eE][sS]|[yY]) 
-            download
-            ;;
-        *)
-            echo "Aborting by user choice."
-            exit 1
-            ;;
-    esac
+    if prompt_yn "Do you want to install MyBB $BRANCH to $INSTALL_DIR?" "Y"; then
+        download
+    else
+        echo "Aborting by user choice."
+        exit 1
 }
 
 pick_command() {
