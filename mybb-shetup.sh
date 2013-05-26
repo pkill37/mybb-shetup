@@ -123,6 +123,7 @@ confirm_install() {
         download
     else
         abort "Aborting by user choice."
+    fi
 }
 
 pick_command() {
