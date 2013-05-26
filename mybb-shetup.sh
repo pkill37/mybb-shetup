@@ -20,6 +20,39 @@ current_shell() {
     ps -p $$ -o cmd="" | cut -d ' ' -f1
 }
 
+prompt_yn() {
+    while true; do
+        
+        # Set a default reply from argument
+        if [ "${2:-}" = "Y" ]; then
+            YN_PROMPT="Y/n"
+            DEFAULT_REPLY="Y"
+        elif [ "${2:-}" = "N" ]; then
+            YN_PROMPT="y/N"
+            DEFAULT_REPLY="N"
+        else
+            YN_PROMPT="y/n"
+            DEFAULT_REPLY=""
+        fi
+ 
+        # 100% portable solution to prompt the user
+        echo -n "$1 [$YN_PROMPT]"
+        read YN
+
+        # If the user just hit enter he wants the default reply
+        if [ -z "$YN" ]; then
+            YN=$DEFAULT_REPLY
+        fi
+ 
+        # Keep prompting the user if given an invalid reply
+        case "$YN" in
+            Y*|y*) return 0 ;;
+            N*|n*) return 1 ;;
+        esac
+
+    done
+}
+
 #############################################################################
 ## Script functions
 #############################################################################
