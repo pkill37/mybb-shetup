@@ -81,19 +81,18 @@ display_ascii_art() {
               __/ |            
              |___/             
     "
-    echo "Because free never tasted so good!
+    echo "
+    Because free never tasted so good!
 
     "
 }
 
 welcome_message() {
     display_ascii_art
+
+    info "Welcome to mybb-shetup, the MyBB shell installer. This script will help you set up a copy of MyBB in a minute!"    
     pause "Press [ENTER] to continue... or press CTRL+C to quit."
 
-    # Say "Initializing" and sleep for 2 seconds. Just because it seems cool.
-    clear
-    info ":: INITIALIZING"
-    info "Welcome to the MyBB shell installer. This script will help you set up a copy of MyBB in under a minute!."
     clear
 }
 
@@ -214,11 +213,11 @@ openbrowser_installdir() {
 main() {
     welcome_message
     dir_select
-    select_branch
-    confirm_install
-    unfold_files
-    rename_config
-    chmod_files
+    #select_branch
+    #confirm_install
+    #unfold_files
+    #rename_config
+    #chmod_files
 }
 
 main "$@"
