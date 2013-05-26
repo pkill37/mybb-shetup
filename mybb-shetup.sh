@@ -92,9 +92,8 @@ welcome_message() {
 
     # Say "Initializing" and sleep for 2 seconds. Just because it seems cool.
     clear
-    echo ":: INITIALIZING"
-    sleep 1
-    echo "Welcome to the MyBB shell installer. This script will help you set up a copy of MyBB in under a minute!."
+    info ":: INITIALIZING"
+    info "Welcome to the MyBB shell installer. This script will help you set up a copy of MyBB in under a minute!."
     clear
 }
 
@@ -105,8 +104,7 @@ dir_select() {
         cd $INSTALL_DIR
     else
         if prompt_yn "The path you entered does not exist. Would you like to create it?" "Y"; then
-            echo "Creating $INSTALL_DIR..."
-            sleep 1
+            info "Creating $INSTALL_DIR..."
             mkdir -p $INSTALL_DIR
             cd $INSTALL_DIR
             INSTALL_ROOT=$(pwd)
@@ -176,15 +174,15 @@ chmod_files() {
 
 create_database() {
     # Get root pass
-    echo "To create a database for you, we need some high-level privileges temporarily."
-    sleep 3
+    info "To create a database for you, we need some high-level privileges temporarily."
+
     read -p "We assume your MySQL server has a root user, what is its password? []: " ROOTPASS
     # create/select DB
     read -p "What should the name of the database be? It should not already exist. [mybb]: " DBNAME
     mysql -uroot -p $ROOTPASS -e "CREATE DATABASE '$DBNAME';"
     # create mybb db user
     read -p "What should the username be for the regular DB user that MyBB will use? [mybb]: " DBUSER
-    sleep 1
+
     read -p "Great! What should its password be? []: " DBPASS
     mysql -uroot -p $ROOTPASS -e "CREATE USER '$DBUSER'@'localhost' IDENTIFIED BY '$DBPASS';"
     # grant mybb db user permissions
