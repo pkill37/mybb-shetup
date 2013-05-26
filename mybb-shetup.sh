@@ -104,8 +104,7 @@ dir_select() {
             cd $INSTALL_DIR
             INSTALL_ROOT=`pwd`
         else
-            echo "Declined option to create path. Canceling installation."
-            exit 1
+            abort "Declined option to create path. Canceling installation."
         fi
     fi  
 }
@@ -118,8 +117,7 @@ confirm_install() {
     if prompt_yn "Do you want to install MyBB $BRANCH to $INSTALL_DIR?" "Y"; then
         download
     else
-        echo "Aborting by user choice."
-        exit 1
+        abort "Aborting by user choice."
 }
 
 pick_command() {
@@ -136,8 +134,7 @@ pick_command() {
         DLCOMMAND="lynx -crawl -dump https://github.com/mybb/mybb/archive/$BRANCH.zip > mybb.zip"
         COMMAND_USED="lynx"
     else
-        echo "git, wget, curl, or lynx are required to install MyBB. Please install one and try again."
-        exit 1
+        abort "git, wget, curl, or lynx are required to install MyBB. Please install one and try again."
     fi
 }
 
@@ -150,8 +147,7 @@ download() {
         if command_exists unzip ; then
             unzip mybb.zip
         else
-            echo "Unzip is required to install MyBB. Please install it using your package manager"
-            exit 1
+            abort "Unzip is required to install MyBB. Please install it using your package manager"
         fi
     fi      
 }
