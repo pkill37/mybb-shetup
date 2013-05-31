@@ -29,7 +29,7 @@ php_version() {
     php -v | head -n 1 | cut -d ' ' -f2 | cut -d '-' -f1;
 }
 
-current_shell() {
+shell_current() {
     ps -p $$ -o cmd="" | cut -d ' ' -f1
 }
 
@@ -93,7 +93,7 @@ prompt_input() {
 ## Script functions
 #############################################################################
 
-display_ascii_art() {
+welcome_ascii_art() {
     echo "
       __  __       ____  ____  
      |  \/  |     |  _ \|  _ \ 
@@ -111,7 +111,7 @@ display_ascii_art() {
 }
 
 welcome_message() {
-    display_ascii_art
+    welcome_ascii_art
 
     info "Welcome to mybb-shetup, the MyBB shell installer. This script will help you set up a copy of MyBB in a minute!"    
     pause "Press [ENTER] to continue... or press CTRL+C to quit."
@@ -136,19 +136,11 @@ dir_select() {
     fi  
 }
 
-select_branch() {
+branch_select() {
     prompt_input "What branch would you like to download?" "MASTER/stable/feature" BRANCH
 }
 
-confirm_install() {
-    if prompt_yn "Do you want to install MyBB $BRANCH to $INSTALL_DIR?" "Y"; then
-        download
-    else
-        abort "Aborting by user choice."
-    fi
-}
-
-pick_command() {
+command_pick() {
     if command_exists git ; then
         DLCOMMAND="git clone https://github.com/mybb/mybb.git -b $BRANCH"
         COMMAND_USED="git"
@@ -166,6 +158,14 @@ pick_command() {
     fi
 }
 
+install_confirm() {
+    if prompt_yn "Do you want to install MyBB $BRANCH to $INSTALL_DIR?" "Y"; then
+        download
+    else
+        abort "Aborting by user choice."
+    fi
+}
+
 download() {
     pick_command
     if [ $COMMAND_USED = "git" ] ; then
@@ -180,22 +180,22 @@ download() {
     fi      
 }
 
-unfold_files() {
+files_unfold() {
     mv mybb/* .
 }
 
-rename_config() {
+config_rename() {
     mv inc/config.default.php inc/config.php
 }
 
-chmod_files() {
+files_chmod() {
     chmod -R 777 cache/
     chmod -R 777 uploads/
     chmod 666 inc/config.php
     chmod 666 inc/settings.php
 }
 
-create_database() {
+database_create() {
     # Get root pass
     info "To create a database for you, we need some high-level privileges temporarily."
 
@@ -212,14 +212,14 @@ create_database() {
     mysql -uroot -p $ROOTPASS -e "GRANT ALL ON $DBNAME.* TO '$DBUSER'@'localhost';"
 }
 
-start_php_server() {
+php_server_start() {
     prompt_input "What hostname would you like to use for the PHP 5.4 server?" "localhost" HOSTNAME
     prompt_input "What port would you like to host the PHP 5.4 server on?" "8000" PORT
 
     php -S $HOSTNAME:$PORT
 }
 
-openbrowser_installdir() {
+browser_open() {
     URL="http://$HOSTNAME:$PORT/install"
 
     if command_exists xdg-open ; then # Linux
@@ -236,11 +236,11 @@ openbrowser_installdir() {
 main() {
     welcome_message
     dir_select
-    select_branch
-    confirm_install
-    unfold_files
-    rename_config
-    chmod_files
+    branch_select
+    install_confirm
+    files_unfold
+    config_rename
+    files_chmod
 }
 
 main "$@"
