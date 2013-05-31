@@ -68,6 +68,27 @@ prompt_yn() {
     done
 }
 
+prompt_input() {
+    local question="$1" # Question to prompt user for input
+    local options="$2" # List of possible options
+    local varname="$3" # Name of the variable to be returned
+
+    # The all-caps word in $options is the default reply
+    local default_reply=$(echo $options | tr -dc '[:upper:]' | tr '[:upper:]' '[:lower:]')
+    
+    # Prompt the user with the question and options
+    echo -n "$question [$options]"
+    read $varname
+
+    # Temporary variable to allow checking if no input was provided
+    eval varname_tmp=\$$varname
+
+    # If the user just hit enter he wants the default reply
+    if [ -z "$varname_tmp" ]; then
+        eval "$varname=$default_reply"
+    fi
+}
+
 #############################################################################
 ## Script functions
 #############################################################################
