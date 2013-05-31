@@ -34,31 +34,33 @@ current_shell() {
 }
 
 prompt_yn() {
+    local question="$1" # Question to be prompted to the user
+    local default="$2" # Default reply (Y or N)
+
+    # Loop until a valid reply is given
     while true; do
-        
+
         # Set a default reply from argument
-        if [ "${2:-}" = "Y" ]; then
-            YN_PROMPT="Y/n"
-            DEFAULT_REPLY="Y"
-        elif [ "${2:-}" = "N" ]; then
-            YN_PROMPT="y/N"
-            DEFAULT_REPLY="N"
+        if [ "${default:-}" = "Y" ]; then
+            local prompt="Y/n"
+        elif [ "${default:-}" = "N" ]; then
+            local prompt="y/N"
         else
-            YN_PROMPT="y/n"
-            DEFAULT_REPLY=""
+            local prompt="y/n"
         fi
  
         # 100% portable solution to prompt the user
-        echo -n "$1 [$YN_PROMPT]"
-        read YN
+        echo -n "$question [$prompt]"
+        local reply
+        read reply
 
         # If the user just hit enter he wants the default reply
-        if [ -z "$YN" ]; then
-            YN=$DEFAULT_REPLY
+        if [ -z "$reply" ]; then
+            reply=$default
         fi
  
-        # Keep prompting the user if given an invalid reply
-        case "$YN" in
+        # Check reply
+        case "$reply" in
             Y*|y*) return 0 ;;
             N*|n*) return 1 ;;
         esac
@@ -213,11 +215,11 @@ openbrowser_installdir() {
 main() {
     welcome_message
     dir_select
-    #select_branch
-    #confirm_install
-    #unfold_files
-    #rename_config
-    #chmod_files
+    select_branch
+    confirm_install
+    unfold_files
+    rename_config
+    chmod_files
 }
 
 main "$@"
