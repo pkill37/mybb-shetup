@@ -120,7 +120,7 @@ welcome_message() {
 }
 
 dir_select() {
-    read -p "Where would you like to install MyBB to (FULL PATH)? []: " INSTALL_DIR
+    prompt_input "Where would you like to install MyBB to (FULL PATH)?" "" INSTALL_DIR
 
     if [[ -d "$INSTALL_DIR" ]] ; then
         cd $INSTALL_DIR
@@ -137,7 +137,7 @@ dir_select() {
 }
 
 select_branch() {
-    read -p "What branch would you like to download? [MASTER/feature/stable]: " BRANCH
+    prompt_input "What branch would you like to download?" "MASTER/stable/feature" BRANCH
 }
 
 confirm_install() {
@@ -199,22 +199,22 @@ create_database() {
     # Get root pass
     info "To create a database for you, we need some high-level privileges temporarily."
 
-    read -p "We assume your MySQL server has a root user, what is its password? []: " ROOTPASS
+    prompt_input "We assume your MySQL server has a root user, what is its password?" "" ROOTPASS
     # create/select DB
-    read -p "What should the name of the database be? It should not already exist. [mybb]: " DBNAME
+    prompt_input "What should the name of the database be? It should not already exist." "mybb" DBNAME
     mysql -uroot -p $ROOTPASS -e "CREATE DATABASE '$DBNAME';"
     # create mybb db user
-    read -p "What should the username be for the regular DB user that MyBB will use? [mybb]: " DBUSER
+    prompt_input "What should the username be for the regular DB user that MyBB will use?" "mybb" DBUSER
 
-    read -p "Great! What should its password be? []: " DBPASS
+    prompt_input "Great! What should its password be? []: " DBPASS
     mysql -uroot -p $ROOTPASS -e "CREATE USER '$DBUSER'@'localhost' IDENTIFIED BY '$DBPASS';"
     # grant mybb db user permissions
     mysql -uroot -p $ROOTPASS -e "GRANT ALL ON $DBNAME.* TO '$DBUSER'@'localhost';"
 }
 
 start_php_server() {
-    read -p "What hostname would you like to use for the PHP 5.4 server? [localhost]" HOSTNAME
-    read -p "What port would you like to host the PHP 5.4 server on? [8000]" PORT
+    prompt_input "What hostname would you like to use for the PHP 5.4 server?" "localhost" HOSTNAME
+    prompt_input "What port would you like to host the PHP 5.4 server on?" "8000" PORT
 
     php -S $HOSTNAME:$PORT
 }
