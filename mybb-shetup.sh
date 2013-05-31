@@ -122,7 +122,7 @@ welcome_message() {
 dir_select() {
     prompt_input "Where would you like to install MyBB to (FULL PATH)?" "" install
 
-    if [[ -d "$install" ]] ; then
+    if [ -d "$install" ]; then
         cd $install
     else
         if prompt_yn "The path you entered does not exist. Would you like to create it?" "Y"; then
@@ -141,16 +141,16 @@ branch_select() {
 }
 
 command_pick() {
-    if command_exists git ; then
+    if command_exists git; then
         download_command="git clone https://github.com/mybb/mybb.git -b $branch"
         download_command_used="git"
-    elif command_exists wget ; then
+    elif command_exists wget; then
         download_command="wget --content-disposition https://github.com/mybb/mybb/archive/$branch.zip"
         download_command_used="wget"
-    elif command_exists curl ; then
+    elif command_exists curl; then
         download_command="curl https://github.com/mybb/mybb/archive/$branch.zip -o mybb.zip"
         download_command_used="curl"
-    elif command_exists lynx ; then
+    elif command_exists lynx; then
         download_command="lynx -crawl -dump https://github.com/mybb/mybb/archive/$branch.zip > mybb.zip"
         download_command_used="lynx"
     else
@@ -168,11 +168,11 @@ install_confirm() {
 
 download() {
     pick_command
-    if [ $download_command_used = "git" ] ; then
+    if [ $download_command_used = "git" ]; then
         $download_command
     else
         $download_command
-        if command_exists unzip ; then
+        if command_exists unzip; then
             unzip mybb.zip
         else
             abort "Unzip is required to install MyBB. Please install it using your package manager"
@@ -196,19 +196,21 @@ files_chmod() {
 }
 
 database_create() {
-    # Get root pass
     info "To create a database for you, we need some high-level privileges temporarily."
 
+    # Get root pass
     prompt_input "We assume your MySQL server has a root user, what is its password?" "" root_pass
-    # create/select DB
+    
+    # Create database
     prompt_input "What should the name of the database be? It should not already exist." "mybb" db_name
     mysql -uroot -p $root_pass -e "CREATE DATABASE '$db_name';"
-    # create mybb db user
-    prompt_input "What should the username be for the regular DB user that MyBB will use?" "mybb" db_user
 
+    # Create database user
+    prompt_input "What should the username be for the regular DB user that MyBB will use?" "mybb" db_user
     prompt_input "Great! What should its password be? []: " db_pass
     mysql -uroot -p $root_pass -e "CREATE USER '$db_user'@'localhost' IDENTIFIED BY '$db_pass';"
-    # grant mybb db user permissions
+
+    # Grant permissions to database user
     mysql -uroot -p $root_pass -e "GRANT ALL ON $db_name.* TO '$db_user'@'localhost';"
 }
 
@@ -222,7 +224,7 @@ php_server_start() {
 browser_open() {
     url="http://$server_hostname:$server_port/install"
 
-    if command_exists xdg-open ; then # Linux
+    if command_exists xdg-open; then # Linux
         xdg-open $url
     else # OSX
         open $url
