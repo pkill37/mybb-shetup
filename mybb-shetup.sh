@@ -120,16 +120,16 @@ welcome_message() {
 }
 
 dir_select() {
-    prompt_input "Where would you like to install MyBB to (FULL PATH)?" "" INSTALL_DIR
+    prompt_input "Where would you like to install MyBB to (FULL PATH)?" "" install
 
-    if [[ -d "$INSTALL_DIR" ]] ; then
-        cd $INSTALL_DIR
+    if [[ -d "$install" ]] ; then
+        cd $install
     else
         if prompt_yn "The path you entered does not exist. Would you like to create it?" "Y"; then
-            info "Creating $INSTALL_DIR..."
-            mkdir -p $INSTALL_DIR
-            cd $INSTALL_DIR
-            INSTALL_ROOT=$(pwd)
+            info "Creating $install..."
+            mkdir -p $install
+            cd $install
+            install_root=$(pwd)
         else
             abort "Declined option to create path. Canceling installation."
         fi
@@ -137,29 +137,29 @@ dir_select() {
 }
 
 branch_select() {
-    prompt_input "What branch would you like to download?" "MASTER/stable/feature" BRANCH
+    prompt_input "What branch would you like to download?" "MASTER/stable/feature" branch
 }
 
 command_pick() {
     if command_exists git ; then
-        DLCOMMAND="git clone https://github.com/mybb/mybb.git -b $BRANCH"
-        COMMAND_USED="git"
+        download_command="git clone https://github.com/mybb/mybb.git -b $branch"
+        download_command_used="git"
     elif command_exists wget ; then
-        DLCOMMAND="wget --content-disposition https://github.com/mybb/mybb/archive/$BRANCH.zip"
-        COMMAND_USED="wget"
+        download_command="wget --content-disposition https://github.com/mybb/mybb/archive/$branch.zip"
+        download_command_used="wget"
     elif command_exists curl ; then
-        DLCOMMAND="curl https://github.com/mybb/mybb/archive/$BRANCH.zip -o mybb.zip"
-        COMMAND_USED="curl"
+        download_command="curl https://github.com/mybb/mybb/archive/$branch.zip -o mybb.zip"
+        download_command_used="curl"
     elif command_exists lynx ; then
-        DLCOMMAND="lynx -crawl -dump https://github.com/mybb/mybb/archive/$BRANCH.zip > mybb.zip"
-        COMMAND_USED="lynx"
+        download_command="lynx -crawl -dump https://github.com/mybb/mybb/archive/$branch.zip > mybb.zip"
+        download_command_used="lynx"
     else
         abort "git, wget, curl, or lynx are required to install MyBB. Please install one and try again."
     fi
 }
 
 install_confirm() {
-    if prompt_yn "Do you want to install MyBB $BRANCH to $INSTALL_DIR?" "Y"; then
+    if prompt_yn "Do you want to install MyBB $branch to $install_dir?" "Y"; then
         download
     else
         abort "Aborting by user choice."
@@ -168,10 +168,10 @@ install_confirm() {
 
 download() {
     pick_command
-    if [ $COMMAND_USED = "git" ] ; then
-        $DLCOMMAND
+    if [ $download_command_used = "git" ] ; then
+        $download_command
     else
-        $DLCOMMAND
+        $download_command
         if command_exists unzip ; then
             unzip mybb.zip
         else
@@ -199,33 +199,33 @@ database_create() {
     # Get root pass
     info "To create a database for you, we need some high-level privileges temporarily."
 
-    prompt_input "We assume your MySQL server has a root user, what is its password?" "" ROOTPASS
+    prompt_input "We assume your MySQL server has a root user, what is its password?" "" root_pass
     # create/select DB
-    prompt_input "What should the name of the database be? It should not already exist." "mybb" DBNAME
-    mysql -uroot -p $ROOTPASS -e "CREATE DATABASE '$DBNAME';"
+    prompt_input "What should the name of the database be? It should not already exist." "mybb" db_name
+    mysql -uroot -p $root_pass -e "CREATE DATABASE '$db_name';"
     # create mybb db user
-    prompt_input "What should the username be for the regular DB user that MyBB will use?" "mybb" DBUSER
+    prompt_input "What should the username be for the regular DB user that MyBB will use?" "mybb" db_user
 
-    prompt_input "Great! What should its password be? []: " DBPASS
-    mysql -uroot -p $ROOTPASS -e "CREATE USER '$DBUSER'@'localhost' IDENTIFIED BY '$DBPASS';"
+    prompt_input "Great! What should its password be? []: " db_pass
+    mysql -uroot -p $root_pass -e "CREATE USER '$db_user'@'localhost' IDENTIFIED BY '$db_pass';"
     # grant mybb db user permissions
-    mysql -uroot -p $ROOTPASS -e "GRANT ALL ON $DBNAME.* TO '$DBUSER'@'localhost';"
+    mysql -uroot -p $root_pass -e "GRANT ALL ON $db_name.* TO '$db_user'@'localhost';"
 }
 
 php_server_start() {
-    prompt_input "What hostname would you like to use for the PHP 5.4 server?" "localhost" HOSTNAME
-    prompt_input "What port would you like to host the PHP 5.4 server on?" "8000" PORT
+    prompt_input "What hostname would you like to use for the PHP 5.4 server?" "localhost" server_hostname
+    prompt_input "What port would you like to host the PHP 5.4 server on?" "8000" server_port
 
-    php -S $HOSTNAME:$PORT
+    php -S $server_hostname:$server_port
 }
 
 browser_open() {
-    URL="http://$HOSTNAME:$PORT/install"
+    url="http://$server_hostname:$server_port/install"
 
     if command_exists xdg-open ; then # Linux
-        xdg-open $URL
+        xdg-open $url
     else # OSX
-        open $URL
+        open $url
     fi
 }
 
