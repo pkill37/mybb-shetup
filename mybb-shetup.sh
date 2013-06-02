@@ -167,7 +167,7 @@ install_confirm() {
 }
 
 download() {
-    pick_command
+    command_pick
     if [ $download_command_used = "git" ]; then
         $download_command
     else
