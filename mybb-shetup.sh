@@ -257,6 +257,7 @@ browser_open() {
 #############################################################################
 
 main() {
+    clear
     welcome_message
     dir_select
     branch_select
