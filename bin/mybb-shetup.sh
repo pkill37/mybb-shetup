@@ -147,3 +147,5 @@ main() {
         return 0;
     fi
 }
+
+main "$@"
