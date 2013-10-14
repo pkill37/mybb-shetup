@@ -7,7 +7,7 @@ set -e
 #############################################################################
 
 . ../lib/utils/general.sh
-. ../lib/utils/prompt.sh
+. ../lib/utils/input.sh
 . ../lib/utils/php.sh
 . ../lib/utils/mysql.sh
 . ../lib/shFlags/src/shflags
@@ -43,12 +43,12 @@ welcome_message() {
 }
 
 dir_select() {
-    prompt_input "Where would you like to install MyBB to (FULL PATH)?" "" install
+    input_reply "Where would you like to install MyBB to (FULL PATH)?" "" install
 
     if [ -d "$install" ]; then
         cd $install
     else
-        if prompt_yn "The path you entered does not exist. Would you like to create it?" "Y"; then
+        if input_yn "The path you entered does not exist. Would you like to create it?" "Y"; then
             info "Creating $install..."
             mkdir -p $install
             cd $install
@@ -60,7 +60,7 @@ dir_select() {
 }
 
 branch_select() {
-    prompt_input "What branch would you like to download?" "MASTER/stable/feature" branch
+    input_reply "What branch would you like to download?" "MASTER/stable/feature" branch
 }
 
 command_pick() {
@@ -82,7 +82,7 @@ command_pick() {
 }
 
 install_confirm() {
-    if prompt_yn "Do you want to install MyBB $branch to $install_dir?" "Y"; then
+    if input_yn "Do you want to install MyBB $branch to $install_dir?" "Y"; then
         download
     else
         abort "Aborting by user choice."
@@ -141,7 +141,7 @@ main() {
     files_unfold
     config_rename
     files_chmod
-    if prompt_yn "Do you want to set up the MySQL database for MyBB too?" "Y"; then
+    if input_yn "Do you want to set up the MySQL database for MyBB too?" "Y"; then
         mysql_setup
     else
         return 0;

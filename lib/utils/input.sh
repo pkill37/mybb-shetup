@@ -1,4 +1,4 @@
-prompt_yn() {
+input_yn() {
     local question="$1" # Question to be prompted to the user
     local default="$2" # Default reply (Y or N)
 
@@ -33,7 +33,7 @@ prompt_yn() {
     done
 }
 
-prompt_input() {
+input_reply() {
     local question="$1" # Question to prompt user for input
     local options="$2" # List of possible options
     local varname="$3" # Name of the variable to be returned

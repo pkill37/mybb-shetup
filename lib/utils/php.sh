@@ -3,8 +3,8 @@ php_version() {
 }
 
 php_server_start() {
-    prompt_input "What hostname would you like to use for the PHP 5.4 server?" "localhost" server_hostname
-    prompt_input "What port would you like to host the PHP 5.4 server on?" "8000" server_port
+    input_reply "What hostname would you like to use for the PHP 5.4 server?" "localhost" server_hostname
+    input_reply "What port would you like to host the PHP 5.4 server on?" "8000" server_port
 
     php -S $server_hostname:$server_port
 }
