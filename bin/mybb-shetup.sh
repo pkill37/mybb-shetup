@@ -107,7 +107,7 @@ files_unfold() {
     mv mybb/* .
 }
 
-config_rename() {
+files_config_rename() {
     mv inc/config.default.php inc/config.php
 }
 
@@ -139,7 +139,7 @@ main() {
     branch_select
     install_confirm
     files_unfold
-    config_rename
+    files_config_rename
     files_chmod
     if input_yn "Do you want to set up the MySQL database for MyBB too?" "Y"; then
         mysql_setup
