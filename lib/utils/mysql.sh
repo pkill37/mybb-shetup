@@ -8,10 +8,9 @@ mysql_location() {
 }
 
 mysql_run_commands() {
-
     # Get root pass
     input_reply "We assume your MySQL server has a root user, what is its password?" "" root_pass
-    
+
     # Create database
     input_reply "What should the name of the database be? It should not already exist." "mybb" db_name
     $mysql_executable -uroot -p $root_pass -e "CREATE DATABASE '$db_name';"

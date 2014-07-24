@@ -1,9 +1,9 @@
-#!/usr/bin/env bash
+#! /usr/bin/env bash
 
 set -e
 
 #############################################################################
-## Include utilities and libraries
+## Utilities & Libraries
 #############################################################################
 
 . ../lib/utils/general.sh
@@ -11,22 +11,23 @@ set -e
 . ../lib/utils/input.sh
 . ../lib/utils/php.sh
 . ../lib/utils/mysql.sh
+
 . ../lib/shFlags/src/shflags
 
 #############################################################################
-## Script functions
+## Business Logic
 #############################################################################
 
 welcome_ascii_art() {
     echo "
-      __  __       ____  ____  
-     |  \/  |     |  _ \|  _ \ 
+      __  __       ____  ____
+     |  \/  |     |  _ \|  _ \
      | \  / |_   _| |_) | |_) |
-     | |\/| | | | |  _ <|  _ < 
+     | |\/| | | | |  _ <|  _ <
      | |  | | |_| | |_) | |_) |
-     |_|  |_|\__, |____/|____/ 
-              __/ |            
-             |___/             
+     |_|  |_|\__, |____/|____/
+              __/ |
+             |___/
     "
     echo "
     Because free never tasted so good!
@@ -35,9 +36,11 @@ welcome_ascii_art() {
 }
 
 welcome_message() {
+    clear
+
     welcome_ascii_art
 
-    info "Welcome to mybb-shetup, the MyBB shell installer. This script will help you set up a copy of MyBB in a minute!"    
+    info "Welcome to mybb-shetup, the MyBB shell installer. This script will help you set up a copy of MyBB in a minute!"
     pause "Press [ENTER] to continue... or press CTRL+C to quit."
 
     clear
@@ -57,7 +60,7 @@ dir_select() {
         else
             abort "Declined option to create path. Canceling installation."
         fi
-    fi  
+    fi
 }
 
 branch_select() {
@@ -101,7 +104,7 @@ download() {
         else
             abort "Unzip is required to install MyBB. Please install it using your package manager"
         fi
-    fi      
+    fi
 }
 
 browser_open() {
@@ -115,11 +118,10 @@ browser_open() {
 }
 
 #############################################################################
-## Bootstrap installer
+## Bootstrap
 #############################################################################
 
 main() {
-    clear
     welcome_message
     dir_select
     branch_select

@@ -13,7 +13,7 @@ input_yn() {
         else
             local prompt="y/n"
         fi
- 
+
         # 100% portable solution to prompt the user
         echo -n "$question [$prompt]"
         local reply
@@ -23,7 +23,7 @@ input_yn() {
         if [ -z "$reply" ]; then
             reply=$default
         fi
- 
+
         # Check reply
         case "$reply" in
             Y*|y*) return 0 ;;
@@ -40,7 +40,7 @@ input_reply() {
 
     # The all-caps word in $options is the default reply
     local default_reply=$(echo $options | tr -dc '[:upper:]' | tr '[:upper:]' '[:lower:]')
-    
+
     # Prompt the user with the question and options
     echo -n "$question [$options]"
     read $varname
