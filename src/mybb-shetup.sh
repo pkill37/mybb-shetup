@@ -6,11 +6,11 @@ set -e
 ## Utilities & Libraries
 #############################################################################
 
-. ../lib/utils/general.sh
-. ../lib/utils/files.sh
-. ../lib/utils/input.sh
-. ../lib/utils/php.sh
-. ../lib/utils/mysql.sh
+. general.sh
+. files.sh
+. input.sh
+. php.sh
+. mysql.sh
 
 . ../lib/shFlags/src/shflags
 
