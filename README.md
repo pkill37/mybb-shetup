@@ -1,4 +1,4 @@
-# mybb-shetup [![Build Status](https://travis-ci.org/faviouz/mybb-shetup.svg?branch=master)](https://travis-ci.org/faviouz/fix-spotify-icon)
+# mybb-shetup [![Build Status](https://travis-ci.org/faviouz/mybb-shetup.svg?branch=master)](https://travis-ci.org/faviouz/mybb-shetup)
 
 > Shell script that downloads and prepares MyBB to be installed
 
